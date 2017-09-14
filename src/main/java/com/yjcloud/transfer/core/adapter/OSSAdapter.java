@@ -1,0 +1,59 @@
+package com.yjcloud.transfer.core.adapter;
+
+import com.aliyun.oss.OSSClient;
+import com.yjcloud.transfer.core.AbstractDocker;
+import com.yjcloud.transfer.core.Lifecycle;
+import com.yjcloud.transfer.entity.MessageDTO;
+import com.yjcloud.transfer.util.config.ConfigureEnum;
+import com.yjcloud.transfer.util.config.PropertyConfigurer;
+
+/**
+ * Created by hhc on 17/9/13.
+ */
+public abstract class OSSAdapter extends AbstractDocker<MessageDTO> implements Lifecycle, Runnable {
+    private Thread worker;
+    private volatile boolean running = false;
+
+    protected OSSClient ossClient = null;
+    protected String bucketName;
+
+    protected abstract void runTask();
+
+    @Override
+    public void run() {
+        this.runTask();
+    }
+
+    @Override
+    public void start() {
+        if (worker == null){
+            this.init();
+            worker = new Thread(this);
+        }
+        worker.start();
+        running = true;
+    }
+
+    @Override
+    public void init() {
+        String endpoint = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_ENDPOINT.getName());
+        String accessKeyId = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_ACCESS_KEY_ID.getName());
+        String accessKeySecret = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_ACCESS_KEY_SECRET.getName());
+        this.bucketName = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_BUCKET_NAME.getName());
+
+        ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+    }
+
+    @Override
+    public boolean isRunning() {
+        return running;
+    }
+
+    @Override
+    public void destroy() {
+        running = false;
+        if (ossClient != null) {
+            ossClient.shutdown();
+        }
+    }
+}
