@@ -36,7 +36,7 @@ public class MongoFSLoader extends MongoAdapter implements Loader {
         Iterable<String> collections = Splitter.on(",").split(collectionNames);
         for (String collection : collections) {
             GridFS fs;
-            if (StringUtils.isBlank(collectionNames)){
+            if (StringUtils.isBlank(collectionNames)) {
                 fs = new GridFS(db);
             } else {
                 fs = new GridFS(db, collection);

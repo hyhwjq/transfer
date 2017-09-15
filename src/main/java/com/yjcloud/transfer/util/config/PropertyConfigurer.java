@@ -28,7 +28,7 @@ public class PropertyConfigurer extends PropertyPlaceholderConfigurer {
     }
 
     public static void check(String key) throws IllegalArgumentException {
-        if (!propertyMap.containsKey(key)){
+        if (!containsKey(key)) {
             throw new IllegalArgumentException("not configured: " + key);
         }
     }

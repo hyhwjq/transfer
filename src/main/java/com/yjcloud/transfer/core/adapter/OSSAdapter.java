@@ -1,5 +1,6 @@
 package com.yjcloud.transfer.core.adapter;
 
+import com.aliyun.oss.ClientConfiguration;
 import com.aliyun.oss.OSSClient;
 import com.yjcloud.transfer.core.AbstractDocker;
 import com.yjcloud.transfer.core.Lifecycle;
@@ -26,7 +27,7 @@ public abstract class OSSAdapter extends AbstractDocker<MessageDTO> implements L
 
     @Override
     public void start() {
-        if (worker == null){
+        if (worker == null) {
             this.init();
             worker = new Thread(this);
         }
@@ -41,7 +42,12 @@ public abstract class OSSAdapter extends AbstractDocker<MessageDTO> implements L
         String accessKeySecret = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_ACCESS_KEY_SECRET.getName());
         this.bucketName = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_BUCKET_NAME.getName());
 
-        ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        if (PropertyConfigurer.containsKey(ConfigureEnum.DESTINATION_OSS_SUPPORT_CNAME.getName())) {
+            String supportCname = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_SUPPORT_CNAME.getName());
+            ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret, new ClientConfiguration().setSupportCname(!"false".equals(supportCname)));
+        } else {
+            ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        }
     }
 
     @Override

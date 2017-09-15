@@ -40,6 +40,8 @@ dest.oss.accessKeyId=******
 dest.oss.accessKeySecret=******
 <!-- 目的oss的bucketName -->
 dest.oss.bucket.name=bucketName
+<!-- 目的ossClient是否绑定CNAME域名 -->
+dest.oss.support.cname=false
 ```
 
 ## 导出的数据库是Mongo的document需配置
