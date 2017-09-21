@@ -2,6 +2,7 @@ package com.yjcloud.transfer.core.dumper;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.yjcloud.transfer.core.DataDocker;
 import com.yjcloud.transfer.core.Dumper;
 import com.yjcloud.transfer.core.adapter.MongoAdapter;
 import com.yjcloud.transfer.entity.MessageDTO;
@@ -14,6 +15,11 @@ import org.bson.Document;
  * Created by hhc on 17/9/13.
  */
 public class MongoDumper extends MongoAdapter implements Dumper {
+    private DataDocker<MessageDTO> docker;
+
+    public MongoDumper(DataDocker<MessageDTO> docker) {
+        this.docker = docker;
+    }
 
     @Override
     protected void runTask() {
@@ -21,7 +27,7 @@ public class MongoDumper extends MongoAdapter implements Dumper {
         LOG.info("mongo dumper started.");
 
         while (isRunning()) {
-            MessageDTO message = super.pull();
+            MessageDTO message = docker.pull();
             MongoCollection<Document> mc = mdb.getCollection(message.getName());
             Document document = message.getData();
             mc.insertOne(document);

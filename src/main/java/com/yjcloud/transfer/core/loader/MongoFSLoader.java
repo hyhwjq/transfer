@@ -6,6 +6,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.yjcloud.transfer.core.DataDocker;
 import com.yjcloud.transfer.core.Loader;
 import com.yjcloud.transfer.core.adapter.MongoAdapter;
 import com.yjcloud.transfer.entity.MessageDTO;
@@ -22,6 +23,11 @@ import java.io.InputStream;
  */
 public class MongoFSLoader extends MongoAdapter implements Loader {
     private Long count = 0L;
+    private DataDocker<MessageDTO> docker;
+
+    public MongoFSLoader(DataDocker<MessageDTO> docker) {
+        this.docker = docker;
+    }
 
     @Override
     protected void runTask() {
@@ -63,7 +69,7 @@ public class MongoFSLoader extends MongoAdapter implements Loader {
                 }
                 String filename = dbFile.getFilename();
 
-                this.pushData(new MessageDTO(filename, ret));
+                docker.pushData(new MessageDTO(filename, ret));
                 count++;
             }
         }

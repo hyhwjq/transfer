@@ -1,8 +1,6 @@
 package com.yjcloud.transfer.core.adapter;
 
-import com.yjcloud.transfer.core.AbstractDocker;
 import com.yjcloud.transfer.core.Lifecycle;
-import com.yjcloud.transfer.entity.MessageDTO;
 import com.yjcloud.transfer.util.config.ConfigureEnum;
 import com.yjcloud.transfer.util.config.PropertyConfigurer;
 import com.yjcloud.transfer.util.mongodb.MongoDBClient;
@@ -10,10 +8,10 @@ import com.yjcloud.transfer.util.mongodb.MongoDBClient;
 /**
  * Created by hhc on 17/9/13.
  */
-public abstract class MongoAdapter extends AbstractDocker<MessageDTO> implements Lifecycle, Runnable {
+public abstract class MongoAdapter extends AbstractAdapter implements Lifecycle, Runnable {
     protected MongoDBClient mongoClient = null;
     private Thread worker;
-    private volatile boolean running = false;
+    private volatile boolean running = true;
 
     protected abstract void runTask();
 

@@ -2,21 +2,20 @@ package com.yjcloud.transfer.core.adapter;
 
 import com.aliyun.oss.ClientConfiguration;
 import com.aliyun.oss.OSSClient;
-import com.yjcloud.transfer.core.AbstractDocker;
 import com.yjcloud.transfer.core.Lifecycle;
-import com.yjcloud.transfer.entity.MessageDTO;
 import com.yjcloud.transfer.util.config.ConfigureEnum;
 import com.yjcloud.transfer.util.config.PropertyConfigurer;
 
 /**
  * Created by hhc on 17/9/13.
  */
-public abstract class OSSAdapter extends AbstractDocker<MessageDTO> implements Lifecycle, Runnable {
+public abstract class OSSAdapter extends AbstractAdapter implements Lifecycle, Runnable {
     private Thread worker;
-    private volatile boolean running = false;
+    private volatile boolean running = true;
 
     protected OSSClient ossClient = null;
     protected String bucketName;
+    protected String appendSuffix = null;
 
     protected abstract void runTask();
 
@@ -40,6 +39,7 @@ public abstract class OSSAdapter extends AbstractDocker<MessageDTO> implements L
         String endpoint = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_ENDPOINT.getName());
         String accessKeyId = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_ACCESS_KEY_ID.getName());
         String accessKeySecret = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_ACCESS_KEY_SECRET.getName());
+        this.appendSuffix = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_FILE_SUFFIX.getName(), null);
         this.bucketName = PropertyConfigurer.getProperty(ConfigureEnum.DESTINATION_OSS_BUCKET_NAME.getName());
 
         if (PropertyConfigurer.containsKey(ConfigureEnum.DESTINATION_OSS_SUPPORT_CNAME.getName())) {

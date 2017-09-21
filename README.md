@@ -42,6 +42,8 @@ dest.oss.accessKeySecret=******
 dest.oss.bucket.name=bucketName
 <!-- 目的ossClient是否绑定CNAME域名 -->
 dest.oss.support.cname=false
+<!-- 传输到oss增加后缀名，为空不加 -->
+dest.oss.file.suffix=
 ```
 
 ## 导出的数据库是Mongo的document需配置

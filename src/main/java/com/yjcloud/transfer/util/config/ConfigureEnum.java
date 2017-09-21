@@ -22,6 +22,7 @@ public enum ConfigureEnum {
     DESTINATION_OSS_ACCESS_KEY_SECRET("dest.oss.accessKeySecret", "目的oss的accessKeySecret"),
     DESTINATION_OSS_BUCKET_NAME("dest.oss.bucket.name", "目的oss的bucketName"),
     DESTINATION_OSS_SUPPORT_CNAME("dest.oss.support.cname", "目的oss是否支持cname"),
+    DESTINATION_OSS_FILE_SUFFIX("dest.oss.file.suffix", "追加的文件后缀"),
 
     RUN_MODE("run.mode", "运行模式"),
     RUN_MODE_MONGO_TO_MONGO("0", "mongo2mongo运行模式"),

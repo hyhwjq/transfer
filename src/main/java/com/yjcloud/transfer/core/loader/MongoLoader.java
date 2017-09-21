@@ -5,6 +5,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.yjcloud.transfer.core.DataDocker;
 import com.yjcloud.transfer.core.Loader;
 import com.yjcloud.transfer.core.adapter.MongoAdapter;
 import com.yjcloud.transfer.entity.MessageDTO;
@@ -17,6 +18,11 @@ import org.bson.Document;
  */
 public class MongoLoader extends MongoAdapter implements Loader {
     private Long count = 0L;
+    private DataDocker<MessageDTO> docker;
+
+    public MongoLoader(DataDocker<MessageDTO> docker) {
+        this.docker = docker;
+    }
 
     @Override
     protected void runTask() {
@@ -33,7 +39,7 @@ public class MongoLoader extends MongoAdapter implements Loader {
             while (cursor.hasNext()) {
                 Document doc = cursor.next();
                 LOG.trace("push doc {}", doc);
-                this.pushData(new MessageDTO(collection, doc));
+                docker.pushData(new MessageDTO(collection, doc));
                 count++;
             }
         }
